@@ -43,7 +43,7 @@ function Header() {
             <div className="flex items-center space-x-5">
               <Sidebar />
             </div>
-            <Link href="/home" passHref>
+            <Link href="/" passHref>
               <div>
                 <div className="bg-slate-100 p-2 w-[200px] -ml-32 rounded-md border border-slate-100">
                   <Image
