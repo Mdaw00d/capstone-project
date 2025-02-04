@@ -1,8 +1,13 @@
+'use client'
+
 import Link from "next/link";
 import Image from "next/image"; // Import the Image component
-import AllProducts from "./components/AllProducts";
+import AllProducts from "./AllProducts";
+
 
 function Hero() {
+  
+   
   return (
     <section>
       <hr /> {/* Nav2 Ends */}
@@ -74,12 +79,14 @@ function Hero() {
         </h2>
         <br />
         <div className="bg-blue-500 w-[360px] h-1 ml-5 -mt-3"></div> <hr />
-        <h3 className="md:ml-[1250px] font-medium ml-[400px] -mt-9">View All</h3>
+        <h3 className="md:ml-[1250px] font-medium ml-[400px] -mt-9">
+          View All
+        </h3>
       </div>
       {/* Render AllProducts with unique keys */}
       <AllProducts />
-       {/* Heading2 */}
-       <div className="py-16 ">
+      {/* Heading2 */}
+      <div className="py-16 ">
         <h2 className="text-xl font-semibold text-gray-600 mt-12 ml-5 ">
           {" "}
           Shop From <span className="text-blue-500 ">Top Categeories</span>

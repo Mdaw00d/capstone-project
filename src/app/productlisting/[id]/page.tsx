@@ -3,27 +3,20 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import Header from "@/app/header";
-import Footer from "@/app/footer";
+import Header from "@/app/components/header";
+import Footer from "@/app/components/footer";
 import Link from "next/link";
-import { useCart } from "@/hooks/useCart"; // Hook for cart functionality
+import { Product } from "@/types/index";
+import { useCart } from "@/app/cartContext";
 
-type Product = {
-  image?: { asset?: { url?: string } };
-  title?: string;
-  id: number;
-  name: string;
-  price: number | string;
-  imageUrl: string; // Ensure it's always a string
-  isNew?: boolean;
-  salePrice?: number;
-  label?: string;
-  labelColor?: string;
-};
+ 
 
 export default function ProductDetail() {
+  const { dispatch } = useCart();
+ 
+
   const { id } = useParams(); // Get the dynamic product ID from URL
-  const { addToCart } = useCart(); // Access cart functionality
+
   const [product, setProduct] = useState<Product | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,12 +31,14 @@ export default function ProductDetail() {
             throw new Error(`Failed to fetch products: ${response.status}`);
           }
           const products: Product[] = await response.json();
-          
+
           console.log("Fetched Products:", products); // Debugging step
 
           setProducts(products);
 
-          const foundProduct = products.find((p) => p.id.toString() === id.toString());
+          const foundProduct = products.find(
+            (p) => p.id.toString() === id.toString()
+          );
           if (!foundProduct) {
             setError("Product not found");
             return;
@@ -52,7 +47,10 @@ export default function ProductDetail() {
           // Ensure imageUrl is always a string
           setProduct({
             ...foundProduct,
-            imageUrl: foundProduct.imageUrl || foundProduct.image?.asset?.url || "/placeholder.jpg",
+            imageUrl:
+              foundProduct.imageUrl ||
+  
+              "/placeholder.jpg",
           });
         } catch (error) {
           console.error("Error fetching product:", error);
@@ -88,6 +86,11 @@ export default function ProductDetail() {
       </div>
     );
   }
+ 
+   const addToCart = (product: Product) => {
+      dispatch({ type: "ADD_TO_CART", product });
+      alert(`${product.name} added to cart!`);
+    };
 
   return (
     <main>
@@ -120,11 +123,11 @@ export default function ProductDetail() {
           </p>
 
           <button
-            onClick={() => addToCart({ ...product, imageUrl: product.imageUrl || "/placeholder.jpg" })}
-            className="md:w-[600px] text-white hover:text-black md:h-[50px] mt-5 mr-2 rounded-md relative group overflow-hidden hover:bg-gray-400 flex justify-center items-center bg-[#007580] transition-colors duration-300 cursor-pointer"
-          >
-            ADD TO CART
-          </button>
+              onClick={() => addToCart(product)}
+              className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Add to Cart
+            </button>
         </div>
       </div>
 
@@ -137,12 +140,20 @@ export default function ProductDetail() {
           {products
             .filter((item) => item.id !== product.id) // Exclude the current product
             .map((product) => (
-              <Link key={product.id} href={`/productlisting/${product.id}`} passHref>
+              <Link
+                key={product.id}
+                href={`/productlisting/${product.id}`}
+                passHref
+              >
                 <div className="card group w-full h-full relative cursor-pointer border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                   <div className="img relative">
                     <Image
                       className="w-full h-48 object-cover"
-                      src={product.imageUrl || product.image?.asset?.url || "/placeholder.jpg"} // Always a string
+                      src={
+                        product.imageUrl ||
+                        
+                        "/placeholder.jpg"
+                      } // Always a string
                       alt={product.name || "Product Image"}
                       width={300}
                       height={200}
@@ -166,4 +177,3 @@ export default function ProductDetail() {
     </main>
   );
 }
-  

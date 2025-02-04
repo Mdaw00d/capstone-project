@@ -1,25 +1,16 @@
 "use client";
+import { useCart } from "../cartContext";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Header from "../header";
-import Footer from "../footer";
+import Header from "../components/header";
+import Footer from "../components/footer";
+import { Product } from "@/sanity/lib/getProducts"
 
-type Product = {
-  id: number;
-  _id?: string; // Some APIs use _id instead of id
-  name: string;
-  price: number | string;
-  imageUrl: string;
-  description?: string;
-  isNew?: boolean;
-  salePrice?: number;
-  label?: string;
-  labelColor?: string;
-  category?: string;
-};
+
 
 export default function Products() {
+  const { dispatch } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
@@ -64,16 +55,7 @@ export default function Products() {
     );
   };
 
-  const addToCart = (product: Product) => {
-    const cartProduct = {
-      ...product,
-      imageUrl: product.imageUrl || "/placeholder.jpg",
-      description: product.description || "No description available",
-      _id: product._id || product.id.toString(), // Convert id to string if _id is missing
-    };
-    console.log("Adding to cart:", cartProduct);
-    // Your cart handling logic here
-  };
+
 
   if (loading) {
     return (
@@ -90,6 +72,13 @@ export default function Products() {
       </div>
     );
   }
+
+ 
+
+  const addToCart = (product: Product) => {
+    dispatch({ type: "ADD_TO_CART", product });
+    alert(`${product.name} added to cart!`);
+  };
 
   return (
     <main>
@@ -158,21 +147,11 @@ export default function Products() {
                     Rs. {product.salePrice || product.price}
                   </h5>
                   <button
-                    onClick={() =>
-                      addToCart({
-                        ...product,
-                        _id: product.id.toString(), // Convert id to _id
-                        description: "No description available", // Default description
-                        image: product.imageUrl, // Use imageUrl as image
-                        title: product.name, // Use name as title
-                        imageUrl: product.imageUrl || "/placeholder.jpg",
-                      } as Product)
-                    }
-                    
-                    className="md:w-[600px] text-white hover:text-black md:h-[50px] mt-5 mr-2 rounded-md relative group overflow-hidden hover:bg-gray-400 flex justify-center items-center bg-[#007580] transition-colors duration-300 cursor-pointer"
-                  >
-                    ADD TO CART
-                  </button>
+              onClick={() => addToCart(product)}
+              className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Add to Cart
+            </button>
                 </div>
               </div>
             </Link>

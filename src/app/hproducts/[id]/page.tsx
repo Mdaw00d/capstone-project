@@ -4,10 +4,18 @@ import { getProductById, Product } from "@/sanity/lib/getProducts";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Header from "@/app/header";
-import Footer from "@/app/footer";
+import Header from "@/app/components/header";
+import Footer from "@/app/components/footer";
+import { useCart } from "@/app/cartContext"; 
+
+
 
 export default function ProductDetail() {
+  const { dispatch } = useCart();
+  const addToCart = (product: Product) => {
+    dispatch({ type: "ADD_TO_CART", product });
+    alert(`${product.name} added to cart!`);
+  };
   const params = useParams();
   const id = params?.id as string; // Ensure id is a string
   const [product, setProduct] = useState<Product | null>(null);
@@ -34,7 +42,11 @@ export default function ProductDetail() {
   }
 
   if (!product) {
-    return <p className="text-center text-lg font-semibold text-red-600">Product not found</p>;
+    return (
+      <p className="text-center text-lg font-semibold text-red-600">
+        Product not found
+      </p>
+    );
   }
 
   return (
@@ -62,7 +74,14 @@ export default function ProductDetail() {
             {product.description || "No description available."}
           </p>
         </div>
+        
       </div>
+      <button
+              onClick={() => addToCart(product)}
+              className="-mt-28 absolute bg-[#007580] text-white ml-[600px] px-20 py-3 rounded hover:bg-blue-600"
+            >
+              Add to Cart
+            </button>
       <Footer />
     </main>
   );

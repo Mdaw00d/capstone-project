@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Sidebar from "./sidebar";
-import Search from "./components/search";
+import Search from "./search";
 import Image from "next/image";
 
 function Header() {
