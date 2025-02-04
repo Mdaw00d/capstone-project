@@ -1,0 +1,7 @@
+Test Case ID,Test Case Description,Test Steps,Expected Result,Actual Result,Status,Severity Level
+TC001,Validate hompage  ,homepage  > products >their detail pages      ,Products displayed correctly,Products displayed correctly,Passed,Medium
+TC002,Test API error handling,Disconnect API > Refresh page,Show fallback UI with error message,Error message shown,Passed,Medium
+TC003,Check cart functionality,Add product to cart > Verify cart contents remove products,Cart updates with added product,Cart updates as expected,Passed,High
+TC004,Ensure responsiveness on mobile,Resize browser window > Check layout,Layout adjusts properly to screen size,Responsive layout working as intended,Passed,Medium
+TC005,Seacrh Component,click on search bar search products and open products,searches the product easily,Show product suggestions and opens the product after clicking on it,Passed,Medium
+TC006,Product Filtering on all products,Shows dropdown after clicking on the filtering button,Filters the product a/c to their categories,Filter the products,Passed,Medium
